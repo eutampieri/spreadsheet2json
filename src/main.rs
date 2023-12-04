@@ -42,7 +42,7 @@ fn get_object_keys(header: &[calamine::DataType]) -> Vec<String> {
     header
         .iter()
         .map(|x| x.to_string())
-        .map(|x| x.replace(' ', "_"))
+        .map(|x| x.replace(' ', "_").replace('.', ""))
         .map(|x| x.to_lowercase())
         .collect()
 }
@@ -77,7 +77,15 @@ fn main() {
                 result.push(obj);
             }
         }
-        Format::List => todo!(),
+        Format::List => {
+            result = sheet
+                .rows()
+                .skip(args.skip)
+                .into_iter()
+                .map(|x| x.iter().map(convert_values).collect::<Vec<_>>())
+                .map(|x| serde_json::Value::Array(x))
+                .collect();
+        }
     }
     serde_json::to_writer(std::io::stdout(), &result).expect("Cannot write JSON");
 }
