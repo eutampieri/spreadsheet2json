@@ -29,7 +29,7 @@ struct Args {
     #[arg(long, default_value_t = Format::Object)]
     format: Format,
 
-    /// Number of times to greet
+    /// Number of rows to skip
     #[arg(short, long, default_value_t = 0)]
     skip: usize,
 
